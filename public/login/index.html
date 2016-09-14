@@ -1,0 +1,93 @@
+<html>
+<head>
+	<title>home</title>
+	<script type="text/javascript" src="../javascripts/jquery-2.2.4.min.js"></script>
+	<script type="text/javascript">
+		
+function setCookie(cname,cvalue,exdays) {
+    var d = new Date();
+    d.setTime(d.getTime() + (exdays*24*60*60*1000));
+    var expires = "expires=" + d.toGMTString();
+    document.cookie = cname+"="+cvalue+";path=/; "+expires;
+}
+
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+function checkCookie() {
+    var user=getCookie("username");
+    if (user != "") {
+        alert("Welcome again " + user);
+    } else {
+       user = prompt("Please enter your name:","");
+       if (user != "" && user != null) {
+           setCookie("username", user, 30);
+       }
+    }
+}
+
+function login(){
+  $.ajax({
+      url : window.location.origin + '/login',
+      method : "POST",
+      contentType : "application/json",
+      data : JSON.stringify({
+        username : $('#username').val(),
+        password : $('#password').val()
+      }),
+      success : function(data){
+        if(data != 'fail'){
+          setCookie("username",$('#username').val(),10);
+          setCookie("user_id",data.id,10);
+          alert(getCookie("username"));
+        }
+        else{
+          alert('wrong username or password');
+        }
+      }
+    });
+}
+
+function logout(){
+  document.cookie = 'username=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+  document.cookie = 'user_id=;path=/;expires=Thu, 01 Jan 1970 00:00:01 GMT;';
+}
+
+function checkLogin(){
+	if(getCookie("username")!=""){
+		alert("logined "+getCookie("username"));
+	}
+	else{
+		alert("newcome");
+	}
+}
+
+	</script>
+</head>
+<body onload="checkLogin()">
+<a href="../">LOGO</a>
+<a href="">menu1</a>
+<a href="../market">Market</a>
+<a href="../Inventory">Inventory</a>
+<a href="/">Login</a><br><br>
+username
+  <input type="text" name="username" id="username"><br>
+  password
+  <input type="password" name="password" id="password">
+  <br><br>
+  <button onclick="login()">login</button>
+  <button onclick="logout()">logout</button>
+</body>
+</html>

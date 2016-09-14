@@ -1,0 +1,84 @@
+<html>
+<head>
+<title>Inventory</title>
+<script type="text/javascript" src="../javascripts/jquery-2.2.4.min.js"></script>
+<script type="text/javascript">
+	
+function getCookie(cname) {
+    var name = cname + "=";
+    var ca = document.cookie.split(';');
+    for(var i=0; i<ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0)==' ') {
+            c = c.substring(1);
+        }
+        if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+        }
+    }
+    return "";
+}
+
+	function loadInventory(){
+		$.ajax({
+			url : window.location.origin + '/getBooks',
+			method : "POST",
+			contentType : "application/json",
+			data : JSON.stringify({
+				user_id : getCookie("user_id")
+			}),
+			success : function(data){
+				//var books = JSON.parse(data);
+				var books = data;
+				var temp = "";
+				for(var i = 0;i < books.length;i++){
+					temp+='<tr><td>' + books[i].name + '</td><td>' + books[i].writer + '</td><td>' + books[i].translater + '</td><td><button type="button" onclick="read(' + books[i].ID + ')">read</button></td><td><button type="button" onclick="rate(' + books[i].ID + ', 1)">1</button><button type="button" onclick="rate(' + books[i].ID + ', 2)">2</button><button type="button" onclick="rate(' + books[i].ID + ', 3)">3</button><button type="button" onclick="rate(' + books[i].ID + ', 4)">4</button><button type="button" onclick="rate(' + books[i].ID + ', 5)">5</button></td></tr>';
+				}
+				$('#bookTable').append(temp);
+			}
+		});
+	}
+
+	function read(bookId){
+		window.location = window.location.origin + '/book/' + bookId;
+	}
+
+	function rate(bookId, rate){
+		$.ajax({
+			url : window.location.origin + '/rate',
+			method : "POST",
+			contentType : "application/json",
+			data : JSON.stringify({
+				user_id : getCookie("user_id"),
+				book_id : bookId,
+				rate : rate
+			}),
+			success : function(data){
+				alert('rated');
+			}
+		});
+	}
+
+</script>
+</head>
+<body onload="loadInventory()">
+
+<a href="../">LOGO</a>
+<a href="">menu1</a>
+<a href="../Market">Market</a>
+<a href="">Inventory</a>
+<a href="../login">Login</a>
+
+<table id="bookTable" border=1>
+	<tr>
+		<td>name</td>
+		<td>writer</td>
+		<td>translater</td>
+		<td>button</td>
+		<td>set rating</td>
+	</tr>
+	
+</table>
+
+</body>
+</html>

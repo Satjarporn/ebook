@@ -1,0 +1,32 @@
+<html>
+<head>
+<title>home</title>
+<script type="text/javascript" src="../javascripts/jquery-2.2.4.min.js"></script>
+<script type="text/javascript">
+	function regis(){
+		$.ajax({
+			url : window.location.origin + '/regis',
+			method : "POST",
+			contentType : "application/json",
+			data : JSON.stringify({
+				username : $('#username').val(),
+				password : $('#password').val()
+			}),
+			success : function(data){
+				window.location = window.location.origin;
+			}
+		});
+	}
+</script>
+</head>
+<body>
+	<a href="../home">LOGO</a><br><br>
+
+	username
+  	<input type="text" name="username" id="username"><br>
+  	password
+  	<input type="password" name="password" id="password">
+  	<br><br>
+  	<button onclick="regis()">register</button>
+</body>
+</html>

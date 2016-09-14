@@ -1,0 +1,27 @@
+<html>
+<head>
+<title>book</title>
+<script type="text/javascript" src="../javascripts/jquery-2.2.4.min.js"></script>
+<script type="text/javascript">
+	function loadBook(){
+		$.ajax({
+			//url : window.location.origin + '/getBook/1',
+			url : window.location.toString().replace('book','getBook'),
+			success : function(data){
+				//var books = JSON.parse(data);
+				var temp = "";
+				$('#bookPage').append(data);
+			}
+		});
+	}
+</script>
+</head>
+<body onload="loadBook()">
+<a href="../home">LOGO</a>
+<a href="">menu1</a>
+<a href="../market">Market</a>
+<a href="../Inventory">Inventory</a>
+<a href="../login">Login</a>
+<p id="bookPage"></p>
+</body>
+</html>
