@@ -5,8 +5,12 @@
 <script type="text/javascript">
 	
 	function loadMarket(){
+		var filter = location.href.split('=')[1];
+		if(filter == undefined){
+			filter='';
+		}
 		$.ajax({
-			url : window.location.origin + '/getBooks',
+			url : window.location.origin + '/getBooks/'+ filter,
 			success : function(data){
 				//var books = JSON.parse(data);
 				var books = data;
@@ -36,19 +40,23 @@
 	}
 
 	function getCookie(cname) {
-    var name = cname + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0; i<ca.length; i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') {
-            c = c.substring(1);
-        }
-        if (c.indexOf(name) == 0) {
-            return c.substring(name.length, c.length);
-        }
-    }
-    return "";
-}
+    	var name = cname + "=";
+    	var ca = document.cookie.split(';');
+    	for(var i=0; i<ca.length; i++) {
+        	var c = ca[i];
+        	while (c.charAt(0)==' ') {
+            	c = c.substring(1);
+        	}
+        	if (c.indexOf(name) == 0) {
+            	return c.substring(name.length, c.length);
+        	}
+    	}
+    	return "";
+	}
+
+	function search(){
+		window.location = window.location.origin + '/market?q=' + $('#searchString').val();
+	}
 
 </script>
 </head>
@@ -59,6 +67,7 @@
 <a href="../Inventory">Inventory</a>
 <a href="./login">Login</a>
 
+<br><input type="text" id="searchString"><button onclick="search()">search</button><br>
 <table id="bookTable" border=1>
 	<tr>
 		<td>name</td>

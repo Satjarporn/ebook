@@ -35,6 +35,20 @@ app.get('/getBooks', function (req, res) {
 	connection.end();
 });
 
+app.get('/getBooks/:filter', function (req, res) {
+
+	console.log('filter='+req.params.filter);
+	var connection = createConnection();
+    connection.connect();
+
+	connection.query("SELECT * FROM book WHERE name like '%" + req.params.filter + "%'", function(err, rows, fields) {
+  		if (err) throw err;
+  		res.json(rows);
+	});
+
+	connection.end();
+});
+
 app.post('/getBooks', upload.array(), function (req, res) {
 
 	var connection = createConnection();
