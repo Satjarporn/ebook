@@ -1,19 +1,33 @@
 <html>
 <head>
 <title>book</title>
-<script type="text/javascript" src="../javascripts/jquery-2.2.4.min.js"></script>
+<script type="text/javascript" src="/javascripts/jquery-2.2.4.min.js"></script>
 <script type="text/javascript">
 	function loadBook(){
 		$.ajax({
 			//url : window.location.origin + '/getBook/1',
 			url : window.location.toString().replace('book','getBook'),
 			success : function(data){
-				//var books = JSON.parse(data);
 				var temp = "";
-				$('#bookPage').append(data);
+				for(var i = 0;i < data.length;i++){
+					temp += '<a href="' + window.location.origin + '/book/'+ data[i].book_id + '/' + data[i].number + '">' + data[i].name + '</a>';
+				}
+				$('#chap').append(temp);
+				var temp = window.location.toString().replace(window.location.origin.toString() + '/book/','');
+				getcahpter(data[0].book_id , temp.includes('/')?  temp.split('/')[1]:data[0].number);
 			}
 		});
 	}
+
+function getcahpter(id, number){
+	$.ajax({
+		url : window.location.origin + '/getChapter/' + id + '/' + number,
+		success : function(data){
+			$('#bookPage').append(data);
+		}
+	})
+}
+
 </script>
 </head>
 <body onload="loadBook()">
@@ -21,7 +35,8 @@
 <a href="">menu1</a>
 <a href="../market">Market</a>
 <a href="../Inventory">Inventory</a>
-<a href="../login">Login</a>
+<a href="../login">Login</a><br>
+<div id="chap"></div>
 <p id="bookPage"></p>
 </body>
 </html>

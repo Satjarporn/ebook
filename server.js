@@ -62,8 +62,17 @@ app.post('/getBooks', upload.array(), function (req, res) {
 	connection.end();
 });
 
-app.get('/getBook/:bookID', function(req, res) {
+/*app.get('/getBook/:bookID', function(req, res) {
   fs.readFile('books/'+ req.params.bookID +'.txt', function (err, data) {
+  	if (err) {
+  		return console.error(err);
+  	}
+  	res.send(data.toString());
+  });
+
+});*/
+app.get('/getChapter/:bookID/:number', function(req, res) {
+  fs.readFile('books/'+ req.params.bookID + '/' + req.params.number +'.txt', function (err, data) {
   	if (err) {
   		return console.error(err);
   	}
@@ -72,7 +81,39 @@ app.get('/getBook/:bookID', function(req, res) {
 
 });
 
+app.get('/getBook/:bookID', function(req, res) {
+  var connection = createConnection();
+    connection.connect();
+
+	connection.query("SELECT * FROM chapter WHERE book_id = " + req.params.bookID + " ORDER BY number", function(err, rows, fields) {
+  		if (err) throw err;
+  		res.json(rows);
+	});
+
+});
+
+app.get('/getBook/:bookID/:number', function(req, res) {
+  var connection = createConnection();
+    connection.connect();
+
+	connection.query("SELECT * FROM chapter WHERE book_id = " + req.params.bookID + " ORDER BY number", function(err, rows, fields) {
+  		if (err) throw err;
+  		res.json(rows);
+	});
+
+});
+
 app.get('/book/:bookID', function(req, res) {
+  fs.readFile('books/index.html', function (err, data) {
+  	if (err) {
+  		return console.error(err);
+  	}
+  	res.send(data.toString());
+  });
+
+});
+
+app.get('/book/:bookID/:number', function(req, res) {
   fs.readFile('books/index.html', function (err, data) {
   	if (err) {
   		return console.error(err);
